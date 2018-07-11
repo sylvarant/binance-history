@@ -1,0 +1,9 @@
+(jbuild_version 1)
+
+(executable
+ ((name        analyse)
+  (public_name binance-hisory)
+  (modules     (Analyse))
+  (preprocess (pps (ppx_jane ppxlib.runner)))
+  (libraries (rest))))
+

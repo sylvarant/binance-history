@@ -1,0 +1,9 @@
+(jbuild_version 1)
+
+(library
+ ((name        rest)
+  (public_name binance_rest)
+  (synopsis "REST API for Binance")
+  (preprocess (pps (ppx_sexp_conv)))
+  (libraries (base fmt ocplib-json-typed ptime core async cohttp-async yojson digestif.c hex))))
+
