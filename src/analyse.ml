@@ -26,7 +26,7 @@ let get_data sym =
 
 let get_history sym = 
  printf "Getting hist data for %s \n" sym ;
- let last = 1483243199000 in
+ let last : int64 = 1483243199000L in
  (Rest.HistoricalData.get sym last) >>= begin function
   | Error err -> failwith (Rest.BinanceError.to_string err)
   | Ok ls -> printf "result size == %d\n" (List.length ls); Deferred.unit

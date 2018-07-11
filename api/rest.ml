@@ -142,14 +142,14 @@ end
 module HistoricalData = struct
 
  type record = { 
-  open_time : int;
-  close_time : int ;
+  open_time : int64;
+  close_time : int64 ;
   start : float ;
   high : float;
   low : float ;
   close : float;
   volume : float;
-  trades : int
+  trades : int64
  } 
 
  type t = record list
@@ -168,14 +168,14 @@ module HistoricalData = struct
   let open Yojson.Basic.Util in
    let to_type js : record = match (js |> to_list) with
     | ot::o::h::l::c::v::ct::q::t::xs -> { 
-      open_time = (ot |> to_int) ; 
-      close_time = (ct |> to_int);
+      open_time = Int64.of_int (ot |> to_int) ; 
+      close_time = Int64.of_int (ct |> to_int);
       start = float_of_string (o |> to_string);
       high = float_of_string (h |> to_string);
       low = float_of_string (l |> to_string);
       close = float_of_string (c |> to_string);
       volume = float_of_string (v |> to_string);
-      trades = (t |> to_int);
+      trades = Int64.of_int (t |> to_int);
      }
     | _ -> failwith ("Could not recognize binance response")
    in
@@ -188,10 +188,10 @@ module HistoricalData = struct
   else
     Ok (get_data (Yojson.Safe.to_basic json))
 
- let get ?buf ?log ?(interv=Hour) (symbol:string) start =
+ let get ?buf ?log ?(interv=Hour) (symbol:string) (start : int64) =
   let pars = ["symbol", [String.uppercase symbol] ;
    "interval", [string_of_interv interv] ;
-   "startTime", [string_of_int start]; ] 
+   "startTime", [Int64.to_string start]; ] 
   in
   call ?buf ?log ~params:pars ~meth:`GET "api/v1/klines" >>|
   parse_resp 

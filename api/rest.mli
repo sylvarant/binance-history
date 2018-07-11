@@ -25,14 +25,14 @@ end
 (* Module to get Historical Data *)
 module HistoricalData : sig
  type record = { 
-  open_time : int;
-  close_time : int ;
+  open_time : int64;
+  close_time : int64 ;
   start : float ;
   high : float;
   low : float ;
   close : float;
   volume : float;
-  trades : int;
+  trades : int64;
  } 
 
  type t = record list
@@ -41,7 +41,7 @@ module HistoricalData : sig
 
  val get :
   ?buf:Bi_outbuf.t -> ?log:Log.t -> ?interv:interval ->
-  string -> int -> (t, BinanceError.t) Result.t Deferred.t
+  string -> int64 -> (t, BinanceError.t) Result.t Deferred.t
 end
 
 module Depth : sig
