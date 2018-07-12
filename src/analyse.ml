@@ -1,7 +1,7 @@
 (*
  * ==========================================================================
  *
- *           File:  Analyse History
+ *           File:  Analyse 
  *
  *    Description:  Tool to fetch binance history for tokens
  *
@@ -13,7 +13,7 @@
 module L = List
 open Core
 open Async
-
+open History
 
 let get_data sym =  
  printf "Getting data for %s \n" sym ;
@@ -24,20 +24,15 @@ let get_data sym =
    Deferred.unit
  end
 
-let get_history sym = 
- printf "Getting hist data for %s \n" sym ;
- let last : int64 = 1483243199000L in
- (Rest.HistoricalData.get sym last) >>= begin function
-  | Error err -> failwith (Rest.BinanceError.to_string err)
-  | Ok ls -> printf "result size == %d\n" (List.length ls); Deferred.unit
- end
-
 let process_symbol (symbol : string) =
  Rest.ExchangeInfo.get_symbols () >>= begin function
   | Error err -> failwith (Rest.BinanceError.to_string err)
-  | Ok syms  -> printf "> %d\n" (L.length syms); (if (L.mem symbol syms) 
-   then (get_history symbol)
-   else failwith "Symbol does not exist")
+  | Ok syms  -> printf "> %d trading pairs available\n" (L.length syms); 
+   (if (L.mem symbol syms) 
+   then begin get_history symbol 1483243199000L >>= fun lst ->
+    printf "found %d results\n" (List.length lst);
+    Deferred.unit
+   end else failwith "Symbol does not exist")
  end 
 
 let command =
