@@ -37,7 +37,7 @@ module HistoricalData : sig
 
  type t = record list
 
- type interval = Hour | Half | Quarter | Five | One
+ type interval = Day | Hour | Half | Quarter | Five | One
 
  val get :
   ?buf:Bi_outbuf.t -> ?log:Log.t -> ?interv:interval ->

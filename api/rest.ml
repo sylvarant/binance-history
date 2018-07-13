@@ -154,9 +154,10 @@ module HistoricalData = struct
 
  type t = record list
 
- type interval = Hour | Half | Quarter | Five | One
+ type interval = Day | Hour | Half | Quarter | Five | One
 
  let string_of_interv = function 
+  | Day -> "1d"
   | Hour -> "1h"
   | Half -> "30m"
   | Quarter -> "15m"
@@ -188,7 +189,7 @@ module HistoricalData = struct
   else
     Ok (get_data (Yojson.Safe.to_basic json))
 
- let get ?buf ?log ?(interv=Hour) (symbol:string) (start : int64) =
+ let get ?buf ?log ?(interv=Day) (symbol:string) (start : int64) =
   let pars = ["symbol", [String.uppercase symbol] ;
    "interval", [string_of_interv interv] ;
    "startTime", [Int64.to_string start]; ] 
